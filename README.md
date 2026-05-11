@@ -41,7 +41,6 @@ UI is rather basic, just tests to make sure everything functions as it should
 
 ## >Future improvements:
 <ul>
-  <li>Editing existing contacts</li>
   <li>Search bar for contacts</li>
   <li>Sorting (A-Z)</li>
   <li>Improving UI styling</li>
