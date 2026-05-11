@@ -1,18 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Contacts>
   <Contact>
-    <Name>Patryk</Name>
-    <PhoneNumber>111222333</PhoneNumber>
-    <Email>patryk@gmail.com</Email>
-  </Contact>
-  <Contact>
-    <Name>david</Name>
-    <PhoneNumber>222333444</PhoneNumber>
-    <Email>david@gmail.com</Email>
-  </Contact>
-  <Contact>
     <Name>Andrew</Name>
     <PhoneNumber>666777888</PhoneNumber>
     <Email>Andrew@gmail.com</Email>
+  </Contact>
+  <Contact>
+    <Name>patryk</Name>
+    <PhoneNumber>222333444</PhoneNumber>
+    <Email>patryk@gmail.com</Email>
   </Contact>
 </Contacts>

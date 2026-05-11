@@ -11,12 +11,13 @@ using System.Windows.Shapes;
 using System.Linq;  // Linq and xml.Linq used to link my xml to this file
 using System.Xml.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions; // Email validation
+using System.Text.RegularExpressions;
+using System.Printing; // Email validation
 
 namespace Contacts
 {
    
-    public partial class MainWindow : Window
+    public partial class MainWindow: Window
     {
         List<Contact> contacts;
         public MainWindow()
@@ -29,8 +30,12 @@ namespace Contacts
                     Name = c.Element("Name")?.Value,
                     PhoneNumber = c.Element("PhoneNumber")?.Value,
                     Email = c.Element("Email")?.Value
+
+                    
                 })
                 .ToList();
+
+            Contact_List.ItemsSource = contacts;
         }
 
         public class Contact
@@ -40,24 +45,10 @@ namespace Contacts
             public string Email { get; set; }
         }
 
-
-
-
         private void View_contact(object sender, RoutedEventArgs e)
         {
-            Contact_View.Text = "";
-
-            foreach (var contact in contacts)
-            {
-                Contact_View.Text +=
-                    $"Name: {contact.Name}\n" +
-                    $"Phone number: {contact.PhoneNumber}\n" +
-                    $"Email: {contact.Email}\n\n";
-                   
-            }
-            
-
-        }
+         Contact_List.Items.Refresh();
+        }   // View Contact Function
 
         private void AddContacts(object sender, RoutedEventArgs e)
         {
@@ -92,30 +83,12 @@ namespace Contacts
                     PhoneNumber = phoneNumber,
                     Email = email
                 });
+                Contact_List.Items.Refresh();
                 MessageBox.Show("Contact added succesfully!");
             }
 
             
-        }
-
-        private void Remove_Contact(object sender, RoutedEventArgs e)
-        {
-            string nameToRemove = TextName.Text;
-            var contact2 = contacts.FirstOrDefault(c => c.Name.Equals(nameToRemove, StringComparison.OrdinalIgnoreCase));
-
-            if (contact2 != null)  // if loop to remove contact
-            {
-                contacts.Remove(contact2);
-                MessageBox.Show("Contact removed");
-            }
-            else
-            {
-                MessageBox.Show("Contact does not exist.\nPlease enter a valid contact");  // Validation if contact existsS
-                return;
-            }
-
-
-        }
+        } // Add contact function
 
         private void Save(object sender, RoutedEventArgs e) // Save function
         {
@@ -129,9 +102,58 @@ namespace Contacts
             newXML.Save("Contact.xml"); // save file location
 
             MessageBox.Show("Contacts saved succesfully!");
-            this.Close();
+            
+        }
+
+        private void Edit_Contact(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var contact = button.DataContext as Contact;
+
+            TextName.Text = contact.Name;
+            TextPhone.Text = contact.PhoneNumber;
+            TextEmail.Text = contact.Email;
+        }   // Edit button Function
+
+        private void Remove_Contact(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var contact = button.DataContext as Contact;
+            var result = MessageBox.Show(
+                $"Are you sure you want to remove {contact.Name}?",
+                    "Confirm delete",
+                     MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+            );
+
+            if( result == MessageBoxResult.Yes)
+            {
+                contacts.Remove(contact);
+                Contact_List.Items.Refresh();
+            }
+
+          
+        } // Remove button Function
+
+        private void Window_closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Do you want to save before exiting?",
+                "Exit confirmation",
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question
+                );
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Save(null, null);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
     }
 
-
+        
 }
